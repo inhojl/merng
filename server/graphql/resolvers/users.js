@@ -51,12 +51,16 @@ module.exports = {
       },
       async register(parent, { registerInput: { username, email, password, confirmPassword }}, context, info) {
          // TODO: validate user data
-         const { valid, errors} = validateRegisterInput(
+         const { valid, errors } = validateRegisterInput(
             username,
             email,
             password,
             confirmPassword
          );
+
+         if (!valid) {
+            throw new UserInputError('Errors', { errors })
+         }
 
          // TODO: Make sure user doesn't already exist
          const user = await User.findOne({ username })
